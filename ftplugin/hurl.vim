@@ -12,7 +12,7 @@ set cpoptions&vim
 setlocal foldmethod=expr
 setlocal foldexpr=hurl#fold(v:lnum)
 
-command! -nargs=? -range=% -buffer Hurl silent call append(line('.'), systemlist('hurl '..<q-args>, getline(<line1>,<line2>)))
+command! -nargs=? -range=% -buffer Hurl silent call append(line('.'), [''] + systemlist('hurl '..<q-args>, getline(<line1>,<line2>)))
 nnoremap <buffer> <silent> <plug>(hurl) vip:Hurl<CR>
 vnoremap <buffer> <silent> <plug>(hurl) <cmd>Hurl<CR>
 
