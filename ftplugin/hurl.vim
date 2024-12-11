@@ -13,8 +13,25 @@ setlocal foldmethod=expr
 setlocal foldexpr=hurl#fold(v:lnum)
 
 command! -nargs=? -range=% -buffer Hurl silent call append(line('.'), [''] + systemlist('hurl '..<q-args>, getline(<line1>,<line2>))) " | normal! }gq}
+command! -nargs=? -range=% -buffer H    <line1>,<line2>Hurl <args>
 nnoremap <buffer> <silent> <plug>(hurl) vip:Hurl<CR>
 vnoremap <buffer> <silent> <plug>(hurl) <cmd>Hurl<CR>
+
+" " From https://github.com/Orange-OpenSource/hurl/blob/f81fa71ab82bf2f4554ea1f63a297a66c91b8911/docs/tutorial/debug-tips.md?plain=1#L481
+" " available since 6.0 :
+" [--curl <FILE>] produces a file of curl commands of a run. This is equivalent
+"  of running Hurl in verbose and grepping the standard error for the debug curl
+"  command. The produced file is just a text list of debug commands, one line
+"  per entry:
+" ```shell
+" $ echo 'HEAD https://example.org' | hurl --repeat 3 --curl /tmp/curl.txt
+" $ cat /tmp/curl.txt
+" curl --head 'https://example.org'
+" curl --head 'https://example.org'
+" curl --head 'https://example.org'
+" ```
+command! -nargs=* -buffer Curl !hurl <args> --curl %:S:r.curl %:S
+command! -nargs=* -buffer C    Curl <args>
 
 " use JQ to format JSON if available
 if !exists('s:jq')
